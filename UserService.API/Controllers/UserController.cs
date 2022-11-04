@@ -16,11 +16,25 @@ public class UserController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllUsers")]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+    public async Task<ActionResult<IEnumerable<UserDto>?>> GetAllUsers()
     {
         var allUsers = await _userService.GetAllUsers();
         if (allUsers.Any())
-            return Ok(allUsers);
+        {
+            var users = new List<UserDto>
+            {
+                new UserDto
+                {
+                    Id = 1,
+                    UserName = "Test",
+                    Email = "test@test.com",
+                    FirstName = "Max",
+                    LastName = "Mustermann",
+                    Password = "test"
+                }
+            };
+            return Ok(users);
+        }
         else
             return NotFound();
     }
