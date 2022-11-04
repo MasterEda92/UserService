@@ -1,0 +1,337 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Tests/UserService.Tests.csproj": {}
+  },
+  "projects": {
+    "/Users/stefaneder/Documents/Programmieren/UserService/UserService.API/UserService.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.API/UserService.API.csproj",
+        "projectName": "UserService.API",
+        "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.API/UserService.API.csproj",
+        "packagesPath": "/Users/stefaneder/.nuget/packages/",
+        "outputPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.API/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/stefaneder/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.2.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.402/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj",
+        "projectName": "UserService.Core",
+        "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj",
+        "packagesPath": "/Users/stefaneder/.nuget/packages/",
+        "outputPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/stefaneder/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.402/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/stefaneder/Documents/Programmieren/UserService/UserService.DbAccess/UserService.DbAccess.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.DbAccess/UserService.DbAccess.csproj",
+        "projectName": "UserService.DbAccess",
+        "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.DbAccess/UserService.DbAccess.csproj",
+        "packagesPath": "/Users/stefaneder/.nuget/packages/",
+        "outputPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.DbAccess/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/stefaneder/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj": {
+                "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.402/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Infrastructure/UserService.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Infrastructure/UserService.Infrastructure.csproj",
+        "projectName": "UserService.Infrastructure",
+        "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Infrastructure/UserService.Infrastructure.csproj",
+        "packagesPath": "/Users/stefaneder/.nuget/packages/",
+        "outputPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/stefaneder/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj": {
+                "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj"
+              },
+              "/Users/stefaneder/Documents/Programmieren/UserService/UserService.DbAccess/UserService.DbAccess.csproj": {
+                "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.DbAccess/UserService.DbAccess.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.402/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Tests/UserService.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Tests/UserService.Tests.csproj",
+        "projectName": "UserService.Tests",
+        "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Tests/UserService.Tests.csproj",
+        "packagesPath": "/Users/stefaneder/.nuget/packages/",
+        "outputPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Tests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/stefaneder/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/stefaneder/Documents/Programmieren/UserService/UserService.API/UserService.API.csproj": {
+                "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.API/UserService.API.csproj"
+              },
+              "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj": {
+                "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Core/UserService.Core.csproj"
+              },
+              "/Users/stefaneder/Documents/Programmieren/UserService/UserService.DbAccess/UserService.DbAccess.csproj": {
+                "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.DbAccess/UserService.DbAccess.csproj"
+              },
+              "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Infrastructure/UserService.Infrastructure.csproj": {
+                "projectPath": "/Users/stefaneder/Documents/Programmieren/UserService/UserService.Infrastructure/UserService.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.1.0, )"
+            },
+            "Shouldly": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.402/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
