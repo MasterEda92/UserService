@@ -1,12 +1,11 @@
-using System.Collections.Generic;
 using UserService.Core.Entities;
 
 namespace UserService.Core.Interfaces;
 
 public interface IUserService
 {
-    public IEnumerable<User> GetAllUsers();
-    public User GetUserById(int id);
-    public User GetUserByEmail(string eMail);
-    public User GetUserByUserName(string userName);
+    public Task<IEnumerable<User>> GetAllUsers();
+    public Task<User> GetUserById(int id);
+    public Task<User> GetUserByEmail(string eMail);
+    public Task<User> GetUserByUserName(string userName);
 }
