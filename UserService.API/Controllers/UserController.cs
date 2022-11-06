@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using UserService.API.DTOs;
+using UserService.Core.DTOs;
 using UserService.Core.Entities;
 using UserService.Core.Exceptions;
 using UserService.Core.Interfaces;
@@ -34,7 +34,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{userId:int}")]
-    public async Task<ActionResult<UserDto>> GetUserById(int userId)
+    public async Task<ActionResult<UserDto>> GetUserById([FromRoute]int userId)
     {
         var user = await GetUserByIdIfUserExistsElseNull(userId);
         if (user is null)
@@ -54,5 +54,11 @@ public class UserController : ControllerBase
         {
             return null;
         }
+    }
+
+    [HttpPost("/register")]
+    public async Task<ActionResult<UserDto>> RegisterUser([FromBody]RegisterUserDto newUser)
+    {
+        throw new NotImplementedException();
     }
 }

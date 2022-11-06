@@ -2,8 +2,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using UserService.API.Controllers;
-using UserService.API.DTOs;
 using UserService.API.Mappings;
+using UserService.Core.DTOs;
 using UserService.Core.Entities;
 using UserService.Core.Exceptions;
 using UserService.Core.Interfaces;
@@ -177,5 +177,11 @@ public class TestUserController
         actual?.LastName.ShouldBe(testUser.LastName);
     }
     
+    #endregion
+
+    #region RegisterUserTests
+
+    
+
     #endregion
 }

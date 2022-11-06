@@ -1,5 +1,5 @@
 using AutoMapper;
-using UserService.API.DTOs;
+using UserService.Core.DTOs;
 using UserService.Core.Entities;
 
 namespace UserService.API.Mappings;

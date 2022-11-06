@@ -1,4 +1,4 @@
-namespace UserService.API.DTOs;
+namespace UserService.Core.DTOs;
 
 public class UserDto
 {
