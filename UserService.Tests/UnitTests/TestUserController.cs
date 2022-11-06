@@ -14,6 +14,8 @@ namespace UserService.Tests.UnitTests;
 
 public class TestUserController
 {
+    #region privateFieldsAndCtor
+
     private readonly IMapper _userMapper;
 
     public TestUserController()
@@ -21,6 +23,10 @@ public class TestUserController
         var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new UserProfile()); });
         _userMapper = mapperConfig.CreateMapper();
     }
+
+    #endregion
+
+    #region GetAllUsersTests
 
     [Fact]
     public async Task GetAllUsersShouldReturn404NotFoundWhenThereAreNoUsers()
@@ -106,6 +112,10 @@ public class TestUserController
             item.LastName.ShouldBe(compareUser.LastName);
         }
     }
+    
+    #endregion
+
+    #region GetUserByIdTests
 
     [Fact]
     public async Task GetUserByIdShouldReturn404WhenThereIsNoUserWithGivenId()
@@ -169,4 +179,6 @@ public class TestUserController
         actual?.FirstName.ShouldBe(testUser.FirstName);
         actual?.LastName.ShouldBe(testUser.LastName);
     }
+    
+    #endregion
 }
