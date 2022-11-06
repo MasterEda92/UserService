@@ -68,20 +68,19 @@ public class TestUserController
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
-        var allUsers = UserTestData.GetTestUsers();
+        var allUsers = UserTestData.GetTestUsers().ToList();
         mockUserService.Setup(service => service.GetAllUsers())
-            .Returns(Task.FromResult(allUsers));
+            .Returns(Task.FromResult((IEnumerable<User>)allUsers));
 
         var userController = new UserController(mockUserService.Object, _userMapper);
 
         // Act
         var result = await userController.GetAllUsers();
-        //var actual = (result.Result as OkObjectResult).Value as IEnumerable<UserDto>;
-        var actual = Utility.GetObjectResultContent<IEnumerable<UserDto>>(result!);
+        var actual = Utility.GetObjectResultContent<IEnumerable<UserDto>>(result!)!.ToList();
 
         // Assert
         actual.ShouldNotBeNull();
-        actual!.Count().ShouldBe(allUsers.Count());
+        actual.Count.ShouldBe(allUsers.Count);
     }
 
     [Fact]
@@ -89,21 +88,20 @@ public class TestUserController
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
-        var allUsers = UserTestData.GetTestUsers();
+        var allUsers = UserTestData.GetTestUsers().ToList();
         mockUserService.Setup(service => service.GetAllUsers())
-            .Returns(Task.FromResult(allUsers));
+            .Returns(Task.FromResult((IEnumerable<User>)allUsers));
 
         var userController = new UserController(mockUserService.Object, _userMapper);
 
         // Act
         var result = await userController.GetAllUsers();
-        //var actual = (result.Result as OkObjectResult).Value as IEnumerable<UserDto>;
-        var actual = Utility.GetObjectResultContent<IEnumerable<UserDto>>(result!);
+        var actual = Utility.GetObjectResultContent<IEnumerable<UserDto>>(result!)!.ToList();
 
         // Assert
         foreach (var (item, index) in allUsers.WithIndex())
         {
-            var compareUser = (actual!.ToList())[index];
+            var compareUser = actual[index];
             item.Id.ShouldBe(compareUser.Id);
             item.UserName.ShouldBe(compareUser.UserName);
             item.Email.ShouldBe(compareUser.Email);
@@ -123,7 +121,6 @@ public class TestUserController
         // Arrange
         int userId = 99;
         var mockUserService = new Mock<IUserService>();
-        var testUser = UserTestData.GetTestUser();
         mockUserService.Setup(service => service.GetUserById(userId))
             .Returns(() => throw new UserNotFoundException());
 
@@ -169,7 +166,7 @@ public class TestUserController
         
         // Act
         var result = await userController.GetUserById(userId);
-        var actual = Utility.GetObjectResultContent<UserDto>(result);
+        var actual = Utility.GetObjectResultContent(result);
         
         // Assert
         actual?.Id.ShouldBe(testUser.Id);
