@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UserService.API.DTOs;
 using UserService.Core.Interfaces;
@@ -9,10 +10,12 @@ namespace UserService.API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IMapper _mapper;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IMapper mapper)
     {
         _userService = userService;
+        _mapper = mapper;
     }
 
     [HttpGet(Name = "GetAllUsers")]
@@ -21,18 +24,7 @@ public class UserController : ControllerBase
         var allUsers = await _userService.GetAllUsers();
         if (allUsers.Any())
         {
-            var users = new List<UserDto>
-            {
-                new UserDto
-                {
-                    Id = 1,
-                    UserName = "Test",
-                    Email = "test@test.com",
-                    FirstName = "Max",
-                    LastName = "Mustermann",
-                    Password = "test"
-                }
-            };
+            var users = _mapper.Map<List<UserDto>>(allUsers);
             return Ok(users);
         }
         else
