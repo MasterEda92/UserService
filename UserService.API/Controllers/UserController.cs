@@ -79,4 +79,11 @@ public class UserController : ControllerBase
         else
             return StatusCode((int)HttpStatusCode.InternalServerError);
     }
+
+    [HttpPut("{userId:int}")]
+    public async Task<ActionResult<UserDto>> UpdateUser([FromRoute]int userId, [FromBody]UpdateUserDto updateUser)
+    {
+        var user = await _userService.UpdateUserWithId(userId, updateUser);
+        return Ok(_mapper.Map<UserDto>(user));
+    }
 }

@@ -69,4 +69,15 @@ public static class UserTestData
             LastName = "Eder"
         };
     }
+
+    public static UpdateUserDto GetValidUserForUpdate()
+    {
+        return new UpdateUserDto
+        {
+            Email = "test",
+            Password = "P4ssw0rd",
+            FirstName = "Stefan",
+            LastName = "Eder"
+        };
+    }
 }

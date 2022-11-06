@@ -292,4 +292,55 @@ public class TestUserController
     }
 
     #endregion
+
+    #region UpdateUserTests
+
+    [Fact]
+    public async Task UpdateUserShouldReturn200WhenUserWasUpdatedSuccessfully()
+    {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        const int userId = 1;
+        var updateUser = UserTestData.GetValidUserForUpdate();
+        var newUser = _userMapper.Map<User>(updateUser);
+        
+        mockUserService.Setup(service => service.UpdateUserWithId(userId, updateUser))
+            .Returns(Task.FromResult(newUser));
+
+        var userController = new UserController(mockUserService.Object, _userMapper, GetValidUserValidator());
+        
+        // Act
+        var result = await userController.UpdateUser(userId, updateUser);
+        
+        // Assert
+        result.Result.ShouldBeOfType<OkObjectResult>();
+    }
+    
+    [Fact]
+    public async Task UpdateUserShouldReturnTheUpdatedUserWhenUserWasUpdatedSuccessfully()
+    {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        const int userId = 1;
+        var updateUser = UserTestData.GetValidUserForUpdate();
+        var newUser = _userMapper.Map<User>(updateUser);
+        
+        mockUserService.Setup(service => service.UpdateUserWithId(userId, updateUser))
+            .Returns(Task.FromResult(newUser));
+
+        var userController = new UserController(mockUserService.Object, _userMapper, GetValidUserValidator());
+        
+        // Act
+        var result = await userController.UpdateUser(userId, updateUser);
+        var actual = Utility.GetObjectResultContent(result);
+        
+        // Assert
+        actual?.Email.ShouldBe(updateUser.Email);
+        actual?.FirstName.ShouldBe(updateUser.FirstName);
+        actual?.LastName.ShouldBe(updateUser.LastName);
+    }
+    
+    // ToDo: Hier auch den Fehlerfall prüfen!!!
+
+    #endregion
 }
