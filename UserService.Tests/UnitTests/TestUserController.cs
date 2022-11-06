@@ -24,11 +24,10 @@ public class TestUserController
         _userMapper = mapperConfig.CreateMapper();
     }
 
-    private IUserValidator GetValidUserValidator()
+    private static IUserValidator GetValidUserValidator()
     {
         var mockUserValidator = new Mock<IUserValidator>();
-        var invalidUserData = UserTestData.GetValidUserForRegistration();
-        mockUserValidator.Setup(validator => validator.ValidateUserData(invalidUserData))
+        mockUserValidator.Setup(validator => validator.ValidateUserData(It.IsAny<RegisterUserDto>()))
             .Returns(true);
         return mockUserValidator.Object;
     }
