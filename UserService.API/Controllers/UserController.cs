@@ -1,3 +1,4 @@
+using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UserService.Core.DTOs;
@@ -66,6 +67,16 @@ public class UserController : ControllerBase
         
         var user = await _userService.RegisterNewUser(registerUser);
         var newUser = _mapper.Map<UserDto>(user);
-        return StatusCode(201, newUser);
+        return StatusCode((int)HttpStatusCode.Created, newUser);
+    }
+
+    [HttpDelete("{userId:int}")]
+    public async Task<ActionResult<UserDto>> DeleteUser(int userId)
+    {
+        bool isUserDeleted = await _userService.DeleteUserWithId(userId);
+        if (isUserDeleted)
+            return Ok(new UserDto());
+        else
+            return StatusCode((int)HttpStatusCode.InternalServerError);
     }
 }

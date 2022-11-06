@@ -252,4 +252,44 @@ public class TestUserController
     }
 
     #endregion
+
+    #region DeleteUserTests
+
+    [Fact]
+    public async Task DeleteUserShouldReturn200WhenGivenUserWasDeletedSuccessfully()
+    {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        const int userId = 1;
+        mockUserService.Setup(service => service.DeleteUserWithId(userId))
+            .Returns(Task.FromResult(true));
+
+        var userController = new UserController(mockUserService.Object, _userMapper, GetValidUserValidator());
+        
+        // Act
+        var result = await userController.DeleteUser(userId);
+
+        // Assert
+        result.Result.ShouldBeOfType<OkObjectResult>();
+    }
+    
+    [Fact]
+    public async Task DeleteUserShouldReturn500WhenGivenUserWasDeletedUnsuccessfully()
+    {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        const int userId = 1;
+        mockUserService.Setup(service => service.DeleteUserWithId(userId))
+            .Returns(Task.FromResult(false));
+
+        var userController = new UserController(mockUserService.Object, _userMapper, GetValidUserValidator());
+        
+        // Act
+        var result = await userController.DeleteUser(userId);
+
+        // Assert
+        ((StatusCodeResult)result.Result!).StatusCode.ShouldBe(500);
+    }
+
+    #endregion
 }
