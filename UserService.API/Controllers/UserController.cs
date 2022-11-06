@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UserService.API.DTOs;
+using UserService.Core.Entities;
 using UserService.Core.Exceptions;
 using UserService.Core.Interfaces;
 
@@ -35,15 +36,23 @@ public class UserController : ControllerBase
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserDto>> GetUserById(int userId)
     {
+        var user = await GetUserByIdIfUserExistsElseNull(userId);
+        if (user is null)
+            return NotFound();
+        
+        return Ok(_mapper.Map<UserDto>(user));
+    }
+
+    private async Task<User?> GetUserByIdIfUserExistsElseNull(int userId)
+    {
         try
         {
-            var user = await _userService.GetUserById(userId);
-            return Ok(_mapper.Map<UserDto>(user));
+            var user = await _userService.GetUserById(userId)!;
+            return user;
         }
         catch (UserNotFoundException e)
         {
-            return NotFound();
+            return null;
         }
-        return NotFound();
     }
 }
