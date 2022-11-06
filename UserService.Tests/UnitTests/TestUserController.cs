@@ -105,7 +105,6 @@ public class TestUserController
             item.Id.ShouldBe(compareUser.Id);
             item.UserName.ShouldBe(compareUser.UserName);
             item.Email.ShouldBe(compareUser.Email);
-            item.Password.ShouldBe(compareUser.Password);
             item.FirstName.ShouldBe(compareUser.FirstName);
             item.LastName.ShouldBe(compareUser.LastName);
         }
@@ -172,7 +171,6 @@ public class TestUserController
         actual?.Id.ShouldBe(testUser.Id);
         actual?.UserName.ShouldBe(testUser.UserName);
         actual?.Email.ShouldBe(testUser.Email);
-        actual?.Password.ShouldBe(testUser.Password);
         actual?.FirstName.ShouldBe(testUser.FirstName);
         actual?.LastName.ShouldBe(testUser.LastName);
     }
@@ -199,6 +197,30 @@ public class TestUserController
         
         // Assert
         result.Result.ShouldBeOfType<OkObjectResult>();
+    }
+    
+    [Fact]
+    public async Task RegisterUserShouldReturnTheRegisteredUserWhenRegistrationWasSuccessful()
+    {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        var registerUser = UserTestData.GetValidUserForRegistration();
+        var newUser = _userMapper.Map<User>(registerUser);
+        
+        mockUserService.Setup(service => service.RegisterNewUser(registerUser))
+            .Returns(Task.FromResult(newUser));
+
+        var userController = new UserController(mockUserService.Object, _userMapper);
+        
+        // Act
+        var result = await userController.RegisterUser(registerUser);
+        var actual = Utility.GetObjectResultContent(result);
+        
+        // Assert
+        actual?.UserName.ShouldBe(registerUser.UserName);
+        actual?.Email.ShouldBe(registerUser.Email);
+        actual?.FirstName.ShouldBe(registerUser.FirstName);
+        actual?.LastName.ShouldBe(registerUser.LastName);
     }
 
     #endregion

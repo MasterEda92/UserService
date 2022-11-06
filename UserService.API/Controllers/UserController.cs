@@ -57,8 +57,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("/register")]
-    public async Task<ActionResult<UserDto>> RegisterUser([FromBody]RegisterUserDto newUser)
+    public async Task<ActionResult<UserDto>> RegisterUser([FromBody]RegisterUserDto registerUser)
     {
-        return Ok(new User());
+        var user = await _userService.RegisterNewUser(registerUser);
+        var newUser = _mapper.Map<UserDto>(user);
+        return Ok(newUser);
     }
 }
