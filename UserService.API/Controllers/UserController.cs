@@ -33,7 +33,7 @@ public class UserController : ControllerBase
             return NotFound();
     }
 
-    [HttpGet("{userId}")]
+    [HttpGet("{userId:int}")]
     public async Task<ActionResult<UserDto>> GetUserById(int userId)
     {
         var user = await GetUserByIdIfUserExistsElseNull(userId);
@@ -50,7 +50,7 @@ public class UserController : ControllerBase
             var user = await _userService.GetUserById(userId)!;
             return user;
         }
-        catch (UserNotFoundException e)
+        catch (UserNotFoundException)
         {
             return null;
         }
