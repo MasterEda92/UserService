@@ -22,7 +22,7 @@ public class TestUserController
     }
 
     [Fact]
-    public async Task ShouldReturn404NotFoundWhenThereAreNoUsers()
+    public async Task GetAllUsersShouldReturn404NotFoundWhenThereAreNoUsers()
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
@@ -40,7 +40,7 @@ public class TestUserController
     }
 
     [Fact]
-    public async Task ShouldReturn200OkWhenThereAreUsers()
+    public async Task GetAllUsersShouldReturn200OkWhenThereAreUsers()
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
@@ -57,7 +57,7 @@ public class TestUserController
     }
 
     [Fact]
-    public async Task ShouldReturnListOfAllUsersWhenThereAreUsers()
+    public async Task GetAllUsersShouldReturnListOfAllUsersWhenThereAreUsers()
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
@@ -78,7 +78,7 @@ public class TestUserController
     }
 
     [Fact]
-    public async Task ShouldReturnTheCorrectListOfUsersWhenThereAreUsers()
+    public async Task GetAllUsersShouldReturnTheCorrectListOfUsersWhenThereAreUsers()
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
