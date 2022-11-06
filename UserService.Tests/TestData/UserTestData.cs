@@ -57,4 +57,16 @@ public static class UserTestData
             LastName = "Eder"
         };
     }
+
+    public static RegisterUserDto GetInvalidUserForRegistration()
+    {
+        return new RegisterUserDto
+        {
+            UserName = "TestUser3",
+            Email = "test", // invalid E-Mail
+            Password = "P4ssw0rd",
+            FirstName = "Stefan",
+            LastName = "Eder"
+        };
+    }
 }

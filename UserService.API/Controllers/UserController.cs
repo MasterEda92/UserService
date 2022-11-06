@@ -13,11 +13,13 @@ public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly IUserValidator _validator;
 
-    public UserController(IUserService userService, IMapper mapper)
+    public UserController(IUserService userService, IMapper mapper, IUserValidator validator)
     {
         _userService = userService;
         _mapper = mapper;
+        _validator = validator;
     }
 
     [HttpGet(Name = "GetAllUsers")]
@@ -59,8 +61,11 @@ public class UserController : ControllerBase
     [HttpPost("/register")]
     public async Task<ActionResult<UserDto>> RegisterUser([FromBody]RegisterUserDto registerUser)
     {
+        if (!_validator.ValidateUserData(registerUser))
+            throw new UserRegistrationDataInvalidException();
+        
         var user = await _userService.RegisterNewUser(registerUser);
         var newUser = _mapper.Map<UserDto>(user);
-        return Ok(newUser);
+        return StatusCode(201, newUser);
     }
 }
