@@ -31,4 +31,17 @@ public static class UserTestData
 
         return users;
     }
+
+    public static User GetTestUser()
+    {
+        return new User
+        {
+            Id = 1,
+            UserName = "TestUser1",
+            Email = "test@test.com",
+            FirstName = "Max",
+            LastName = "Mustermann",
+            Password = "P4ssw0rd"
+        };
+    }
 }

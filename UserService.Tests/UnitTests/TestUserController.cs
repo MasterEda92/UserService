@@ -5,6 +5,7 @@ using UserService.API.Controllers;
 using UserService.API.DTOs;
 using UserService.API.Mappings;
 using UserService.Core.Entities;
+using UserService.Core.Exceptions;
 using UserService.Core.Interfaces;
 using UserService.Tests.TestData;
 using UserService.Tests.Utils;
@@ -104,5 +105,68 @@ public class TestUserController
             item.FirstName.ShouldBe(compareUser.FirstName);
             item.LastName.ShouldBe(compareUser.LastName);
         }
+    }
+
+    [Fact]
+    public async Task GetUserByIdShouldReturn404WhenThereIsNoUserWithGivenId()
+    {
+        // Arrange
+        int userId = 99;
+        var mockUserService = new Mock<IUserService>();
+        var testUser = UserTestData.GetTestUser();
+        mockUserService.Setup(service => service.GetUserById(userId))
+            .Returns(() => throw new UserNotFoundException());
+
+        var userController = new UserController(mockUserService.Object, _userMapper);
+        
+        // Act
+        var result = await userController.GetUserById(userId);
+
+        // Assert
+        result.Result.ShouldBeOfType<NotFoundResult>();
+    }
+    
+    [Fact]
+    public async Task GetUserByIdShouldReturn200WhenThereIsAUserWithGivenId()
+    {
+        // Arrange
+        int userId = 1;
+        var mockUserService = new Mock<IUserService>();
+        var testUser = UserTestData.GetTestUser();
+        mockUserService.Setup(service => service.GetUserById(userId))
+            .Returns(Task.FromResult(testUser));
+
+        var userController = new UserController(mockUserService.Object, _userMapper);
+        
+        // Act
+        var result = await userController.GetUserById(userId);
+
+        // Assert
+        result.Result.ShouldBeOfType<OkObjectResult>();
+    }
+    
+    [Fact]
+    public async Task GetUserByIdShouldReturnTheCorrectUserWhenThereIsAUserWithGivenId()
+    {
+        // Arrange
+        int userId = 1;
+        var mockUserService = new Mock<IUserService>();
+        var testUser = UserTestData.GetTestUser();
+        mockUserService.Setup(service => service.GetUserById(userId))
+            .Returns(Task.FromResult(testUser));
+
+        var userController = new UserController(mockUserService.Object, _userMapper);
+        
+        // Act
+        var result = await userController.GetUserById(userId);
+        var actual = Utility.GetObjectResultContent<UserDto>(result);
+        
+        // Assert
+        actual?.Id.ShouldBe(testUser.Id);
+        actual?.UserName.ShouldBe(testUser.UserName);
+        actual?.Email.ShouldBe(testUser.Email);
+        actual?.Password.ShouldBe(testUser.Password);
+        actual?.FirstName.ShouldBe(testUser.FirstName);
+        actual?.LastName.ShouldBe(testUser.LastName);
     }
 }
