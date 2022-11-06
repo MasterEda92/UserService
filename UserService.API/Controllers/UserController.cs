@@ -59,6 +59,6 @@ public class UserController : ControllerBase
     [HttpPost("/register")]
     public async Task<ActionResult<UserDto>> RegisterUser([FromBody]RegisterUserDto newUser)
     {
-        throw new NotImplementedException();
+        return Ok(new User());
     }
 }

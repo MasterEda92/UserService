@@ -2,11 +2,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using UserService.API.Controllers;
-using UserService.API.Mappings;
 using UserService.Core.DTOs;
 using UserService.Core.Entities;
 using UserService.Core.Exceptions;
 using UserService.Core.Interfaces;
+using UserService.Core.Mappings;
 using UserService.Tests.TestData;
 using UserService.Tests.Utils;
 
@@ -181,7 +181,25 @@ public class TestUserController
 
     #region RegisterUserTests
 
-    
+    [Fact]
+    public async Task RegisterUserShouldReturn200WhenRegistrationWasSuccessful()
+    {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        var registerUser = UserTestData.GetValidUserForRegistration();
+        var newUser = _userMapper.Map<User>(registerUser);
+        
+        mockUserService.Setup(service => service.RegisterNewUser(registerUser))
+            .Returns(Task.FromResult(newUser));
+
+        var userController = new UserController(mockUserService.Object, _userMapper);
+        
+        // Act
+        var result = await userController.RegisterUser(registerUser);
+        
+        // Assert
+        result.Result.ShouldBeOfType<OkObjectResult>();
+    }
 
     #endregion
 }

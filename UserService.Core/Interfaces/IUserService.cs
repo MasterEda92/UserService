@@ -10,7 +10,7 @@ public interface IUserService
     public Task<User> GetUserByEmail(string eMail);
     public Task<User> GetUserByUserName(string userName);
 
-    public Task<bool> CreateUser(RegisterUserDto user);
+    public Task<User> RegisterNewUser(RegisterUserDto user);
 
     public Task<User> UpdateUserWithId(int userId, UpdateUserDto user);
 
