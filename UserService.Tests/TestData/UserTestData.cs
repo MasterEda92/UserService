@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UserService.Core.DTOs;
 using UserService.Core.Entities;
 
 namespace UserService.Tests.TestData;
@@ -30,5 +31,64 @@ public static class UserTestData
         };
 
         return users;
+    }
+
+    public static User GetTestUser()
+    {
+        return new User
+        {
+            Id = 1,
+            UserName = "TestUser1",
+            Email = "test@test.com",
+            FirstName = "Max",
+            LastName = "Mustermann",
+            Password = "P4ssw0rd"
+        };
+    }
+
+    public static RegisterUserDto GetValidUserForRegistration()
+    {
+        return new RegisterUserDto
+        {
+            UserName = "TestUser3",
+            Email = "test3@test.com",
+            Password = "P4ssw0rd",
+            FirstName = "Stefan",
+            LastName = "Eder"
+        };
+    }
+
+    public static RegisterUserDto GetInvalidUserForRegistration()
+    {
+        return new RegisterUserDto
+        {
+            UserName = "TestUser3",
+            Email = "test", // invalid E-Mail
+            Password = "P4ssw0rd",
+            FirstName = "Stefan",
+            LastName = "Eder"
+        };
+    }
+
+    public static UpdateUserDto GetValidUserForUpdate()
+    {
+        return new UpdateUserDto
+        {
+            Email = "test@test.com",
+            Password = "P4ssw0rd",
+            FirstName = "Stefan",
+            LastName = "Eder"
+        };
+    }
+    
+    public static UpdateUserDto GetInvalidUserForUpdate()
+    {
+        return new UpdateUserDto
+        {
+            Email = "test",
+            Password = "P4ssw0rd",
+            FirstName = "Stefan",
+            LastName = "Eder"
+        };
     }
 }

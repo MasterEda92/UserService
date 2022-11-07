@@ -1,13 +1,15 @@
 using AutoMapper;
-using UserService.API.DTOs;
+using UserService.Core.DTOs;
 using UserService.Core.Entities;
 
-namespace UserService.API.Mappings;
+namespace UserService.Core.Mappings;
 
 public class UserProfile : Profile
 {
     public UserProfile()
     {
         CreateMap<User, UserDto>();
+        CreateMap<RegisterUserDto, User>();
+        CreateMap<UpdateUserDto, User>();
     }
 }
