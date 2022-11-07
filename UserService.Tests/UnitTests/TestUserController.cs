@@ -317,6 +317,30 @@ public class TestUserController
         // Act and Assert
         Should.Throw<UserRegistrationDataInvalidException>(userController.RegisterUser(invalidUserData));
     }
+    
+    [Fact]
+    public async Task RegisterUserShouldReturn500WhenRegistrationFailedInternally()
+    {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        var registerUser = UserTestData.GetValidUserForRegistration();
+        
+        mockUserService.Setup(service => service.RegisterUser(registerUser))
+            .Returns(() => throw new UserRegistrationFailedException());
+
+        var userController = new UserController(
+            mockUserService.Object,
+            _userMapper,
+            GetValidUserRegistrationValidator(),
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
+        
+        // Act
+        var result = await userController.RegisterUser(registerUser);
+        
+        // Assert
+        ((StatusCodeResult)result.Result!).StatusCode.ShouldBe(500);
+    }
 
     #endregion
 

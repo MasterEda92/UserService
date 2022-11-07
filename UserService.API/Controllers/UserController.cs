@@ -66,39 +66,12 @@ public class UserController : ControllerBase
         // TODO: Hier ggf. die Exeption durch ein BadRequest ersetzen
         if (!_registrationValidator.ValidateUserData(registerUser))
             throw new UserRegistrationDataInvalidException();
+
+        var user = await RegisterAndGetUserElseNull(registerUser);
+        if (user is null)
+            return StatusCode((int)HttpStatusCode.InternalServerError);
         
-        // TODO: Tests einbauen die den Fehlerfall von RegisterUser betrachten! (z.B. 500 InternalServerError zurückgeben)
-        var user = await _userService.RegisterUser(registerUser);
         return StatusCode((int)HttpStatusCode.Created, _mapper.Map<UserDto>(user));
-    }
-
-    [HttpDelete("{userId:int}")]
-    public async Task<ActionResult<UserDto>> DeleteUser(int userId)
-    {
-        if (!await _userService.CheckIfUserWithIdExists(userId))
-            return StatusCode((int)HttpStatusCode.NotFound);
-
-        var deletedUser = await DeletedAndGetUserWithIdElseNull(userId);
-        if (deletedUser is not null)
-            return Ok(_mapper.Map<UserDto>(deletedUser));
-
-        return StatusCode((int)HttpStatusCode.InternalServerError);
-    }
-
-    [HttpPut("{userId:int}")]
-    public async Task<ActionResult<UserDto>> UpdateUser([FromRoute]int userId, [FromBody]UpdateUserDto updateUser)
-    {
-        if (!await _userService.CheckIfUserWithIdExists(userId))
-            return StatusCode((int)HttpStatusCode.NotFound);
-
-        if (!_userUpdateValidator.ValidateUserData(updateUser))
-            return BadRequest();
-
-        var user = await UpdateAndGetUserWithIdElseNull(userId, updateUser);
-        if (user is not null)
-            return Ok(_mapper.Map<UserDto>(user));
-
-        return StatusCode((int)HttpStatusCode.InternalServerError);
     }
     
     [HttpPost("/login")]
@@ -132,24 +105,40 @@ public class UserController : ControllerBase
         
         return Ok(token);
     }
+    
+    [HttpDelete("{userId:int}")]
+    public async Task<ActionResult<UserDto>> DeleteUser(int userId)
+    {
+        if (!await _userService.CheckIfUserWithIdExists(userId))
+            return StatusCode((int)HttpStatusCode.NotFound);
 
+        var deletedUser = await DeletedAndGetUserWithIdElseNull(userId);
+        if (deletedUser is not null)
+            return Ok(_mapper.Map<UserDto>(deletedUser));
+
+        return StatusCode((int)HttpStatusCode.InternalServerError);
+    }
+
+    [HttpPut("{userId:int}")]
+    public async Task<ActionResult<UserDto>> UpdateUser([FromRoute]int userId, [FromBody]UpdateUserDto updateUser)
+    {
+        if (!await _userService.CheckIfUserWithIdExists(userId))
+            return StatusCode((int)HttpStatusCode.NotFound);
+
+        if (!_userUpdateValidator.ValidateUserData(updateUser))
+            return BadRequest();
+
+        var user = await UpdateAndGetUserWithIdElseNull(userId, updateUser);
+        if (user is not null)
+            return Ok(_mapper.Map<UserDto>(user));
+
+        return StatusCode((int)HttpStatusCode.InternalServerError);
+    }
+    
     #endregion
 
     #region PrivateFunctions
-
-    private async Task<User?> UpdateAndGetUserWithIdElseNull(int userId, UpdateUserDto updateUser)
-    {
-        try
-        {
-            return await _userService.UpdateUserWithId(userId, updateUser);
-        }
-        catch (UserUpdateFailedException)
-        {
-            return null;
-        }
-    }
-
-
+    
     private async Task<User?> GetUserByIdIfUserExistsElseNull(int userId)
     {
         try
@@ -161,13 +150,15 @@ public class UserController : ControllerBase
             return null;
         }
     }
-    private async Task<User?> DeletedAndGetUserWithIdElseNull(int userId)
+    
+    private async Task<User?> RegisterAndGetUserElseNull(RegisterUserDto registerUser)
     {
         try
         {
-            return await _userService.DeleteUserWithId(userId);
+            var user = await _userService.RegisterUser(registerUser);
+            return user;
         }
-        catch (UserDeleteFailedException)
+        catch (UserRegistrationFailedException)
         {
             return null;
         }
@@ -184,6 +175,30 @@ public class UserController : ControllerBase
             return null;
         }
     }
-
+    
+    private async Task<User?> DeletedAndGetUserWithIdElseNull(int userId)
+    {
+        try
+        {
+            return await _userService.DeleteUserWithId(userId);
+        }
+        catch (UserDeleteFailedException)
+        {
+            return null;
+        }
+    }
+    
+    private async Task<User?> UpdateAndGetUserWithIdElseNull(int userId, UpdateUserDto updateUser)
+    {
+        try
+        {
+            return await _userService.UpdateUserWithId(userId, updateUser);
+        }
+        catch (UserUpdateFailedException)
+        {
+            return null;
+        }
+    }
+    
     #endregion
 }
