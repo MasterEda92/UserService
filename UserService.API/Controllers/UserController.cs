@@ -121,11 +121,11 @@ public class UserController : ControllerBase
     [HttpPut("{userId:int}")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromRoute]int userId, [FromBody]UpdateUserDto updateUser)
     {
-        if (!await _userService.CheckIfUserWithIdExists(userId))
-            return StatusCode((int)HttpStatusCode.NotFound);
-
         if (!_userUpdateValidator.ValidateUserData(updateUser))
             return BadRequest();
+        
+        if (!await _userService.CheckIfUserWithIdExists(userId))
+            return StatusCode((int)HttpStatusCode.NotFound);
 
         var user = await UpdateAndGetUserWithIdElseNull(userId, updateUser);
         if (user is not null)
