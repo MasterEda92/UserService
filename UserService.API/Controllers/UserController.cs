@@ -18,14 +18,20 @@ public class UserController : ControllerBase
         private readonly IMapper _mapper;
         private readonly IUserRegistrationValidator _registrationValidator;
         private readonly IUserUpdateValidator _userUpdateValidator;
-    
-        public UserController(IUserService userService, IMapper mapper, IUserRegistrationValidator registrationValidator,
-            IUserUpdateValidator userUpdateValidator)
+        private readonly IUserLoginValidator _userLoginValidator;
+
+        public UserController(
+            IUserService userService,
+            IMapper mapper,
+            IUserRegistrationValidator registrationValidator,
+            IUserUpdateValidator userUpdateValidator,
+            IUserLoginValidator userLoginValidator)
         {
             _userService = userService;
             _mapper = mapper;
             _registrationValidator = registrationValidator;
             _userUpdateValidator = userUpdateValidator;
+            _userLoginValidator = userLoginValidator;
         }
 
     #endregion
@@ -93,8 +99,40 @@ public class UserController : ControllerBase
     
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
+        
+        [HttpPost("/login")]
+        public async Task<ActionResult<string>> LoginUser ([FromBody]LoginUserDto loginUser)
+        {
+            if (!_userLoginValidator.ValidateUserData(loginUser))
+                return BadRequest();
+            
+            // TODO: Darüber nachdenken, ob das nicht im Validator über Exceptions oder Status-DTO abgebidlet werden soll!
+            if (!string.IsNullOrWhiteSpace(loginUser.UserName))
+            {
+                var user = await _userService.GetUserByUserName(loginUser.UserName);
+                if (user is null)
+                    return StatusCode((int)HttpStatusCode.NotFound);
+            }
+            
+            else if (!string.IsNullOrWhiteSpace(loginUser.Email))
+            {
+                var user = await _userService.GetUserByEmail(loginUser.Email);
+                if (user is null)
+                    return StatusCode((int)HttpStatusCode.NotFound);
+            }
+            else
+            {
+                // should be caught by Validation
+            }
 
-    #endregion
+            var token = await LoginUserAndGetTokenElseNull(loginUser);
+            if (token is null)
+                return StatusCode((int)HttpStatusCode.Forbidden);
+            
+            return Ok(token);
+        }
+
+        #endregion
 
     #region PrivateFunctions
 
@@ -135,8 +173,19 @@ public class UserController : ControllerBase
                 return null;
             }
         }
+        
+        private async Task<string?> LoginUserAndGetTokenElseNull(LoginUserDto loginUser)
+        {
+            try
+            {
+                var token = await _userService.LoginUser(loginUser);
+                return token;
+            }
+            catch (UserLoginFailedException)
+            {
+                return null;
+            }
+        }
 
     #endregion
-
-    
 }
