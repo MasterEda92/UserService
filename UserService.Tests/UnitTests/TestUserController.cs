@@ -295,7 +295,7 @@ public class TestUserController
     }
 
     [Fact]
-    public void RegisterUserShouldThrowUserRegistrationDataInvalidExceptionWhenGivenUserDataIsInvalid()
+    public async Task RegisterUserShouldReturn400WhenGivenUserDataIsInvalid()
     {
         // Arrange
         var mockUserValidator = new Mock<IUserRegistrationValidator>();
@@ -314,8 +314,11 @@ public class TestUserController
             GetValidUserUpdateValidator(),
             GetValidUserLoginValidator());
         
-        // Act and Assert
-        Should.Throw<UserRegistrationDataInvalidException>(userController.RegisterUser(invalidUserData));
+        // Act 
+        var result = await userController.RegisterUser(invalidUserData);
+        
+        // Assert
+        ((StatusCodeResult)result.Result!).StatusCode.ShouldBe(400);
     }
     
     [Fact]

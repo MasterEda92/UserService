@@ -63,9 +63,8 @@ public class UserController : ControllerBase
     [HttpPost("/register")]
     public async Task<ActionResult<UserDto>> RegisterUser([FromBody]RegisterUserDto registerUser)
     {
-        // TODO: Hier ggf. die Exeption durch ein BadRequest ersetzen
         if (!_registrationValidator.ValidateUserData(registerUser))
-            throw new UserRegistrationDataInvalidException();
+            return BadRequest();
 
         var user = await RegisterAndGetUserElseNull(registerUser);
         if (user is null)
