@@ -77,7 +77,7 @@ public class UserController : ControllerBase
     [HttpPut("{userId:int}")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromRoute]int userId, [FromBody]UpdateUserDto updateUser)
     {
-        if (!await CheckIfUserExists(userId))
+        if (!await _userService.CheckIfUserWithIdExists(userId))
             return StatusCode((int)HttpStatusCode.NotFound);
 
         if (!_userUpdateValidator.ValidateUserData(updateUser))
@@ -114,12 +114,5 @@ public class UserController : ControllerBase
         {
             return null;
         }
-    }
-    
-    private async Task<bool> CheckIfUserExists(int userId)
-    {
-        // TODO: Hier ggf. in der Service-Klasse eine eigene Funktion einbauen, die nur prüft ob ein User zur übergebenen Id existiert ohne den ganzen User zu ermitteln.
-        var userToDelete = await GetUserByIdIfUserExistsElseNull(userId);
-        return userToDelete is not null;
     }
 }

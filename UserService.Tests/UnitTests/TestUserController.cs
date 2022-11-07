@@ -421,8 +421,8 @@ public class TestUserController
         mockUserService.Setup(service => service.UpdateUserWithId(userId, updateUser))
             .Returns(Task.FromResult(newUser));
         
-        mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(Task.FromResult(newUser));
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(userId))
+            .Returns(Task.FromResult(true));
 
         var userController = new UserController(
             mockUserService.Object,
@@ -448,8 +448,8 @@ public class TestUserController
         
         mockUserService.Setup(service => service.UpdateUserWithId(userId, updateUser))
             .Returns(Task.FromResult(newUser));
-        mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(Task.FromResult(newUser));
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(userId))
+            .Returns(Task.FromResult(true));
 
         var userController = new UserController(
             mockUserService.Object,
@@ -477,8 +477,8 @@ public class TestUserController
         
         mockUserService.Setup(service => service.UpdateUserWithId(userId, updateUser))
             .Returns(Task.FromResult(new User()));
-        mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(() => throw new UserNotFoundException());
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(userId))
+            .Returns(Task.FromResult(false));
 
         var userController = new UserController(
             mockUserService.Object,
@@ -500,12 +500,11 @@ public class TestUserController
         var mockUserService = new Mock<IUserService>();
         const int userId = 1;
         var updateUser = UserTestData.GetInvalidUserForUpdate();
-        var newUser = _userMapper.Map<User>(updateUser);
         
         mockUserService.Setup(service => service.UpdateUserWithId(userId, updateUser))
             .Returns(Task.FromResult(new User()));
-        mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(Task.FromResult(newUser));
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(userId))
+            .Returns(Task.FromResult(true));
 
         var mockUserUpdateValidator = new Mock<IUserUpdateValidator>();
         mockUserUpdateValidator.Setup(validator => validator.ValidateUserData(updateUser))
@@ -531,12 +530,11 @@ public class TestUserController
         var mockUserService = new Mock<IUserService>();
         const int userId = 1;
         var updateUser = UserTestData.GetValidUserForUpdate();
-        var newUser = _userMapper.Map<User>(updateUser);
         
         mockUserService.Setup(service => service.UpdateUserWithId(userId, updateUser))
             .Returns(() => throw new UserUpdateFailedException());
-        mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(Task.FromResult(newUser));
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(userId))
+            .Returns(Task.FromResult(true));
 
         var userController = new UserController(
             mockUserService.Object,

@@ -15,4 +15,6 @@ public interface IUserService
     public Task<User> UpdateUserWithId(int userId, UpdateUserDto user);
 
     public Task<bool> DeleteUserWithId(int userId);
+
+    public Task<bool> CheckIfUserWithIdExists(int userId);
 }
