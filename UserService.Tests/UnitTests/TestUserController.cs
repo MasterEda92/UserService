@@ -247,7 +247,7 @@ public class TestUserController
         var registerUser = UserTestData.GetValidUserForRegistration();
         var newUser = _userMapper.Map<User>(registerUser);
         
-        mockUserService.Setup(service => service.RegisterNewUser(registerUser))
+        mockUserService.Setup(service => service.RegisterUser(registerUser))
             .Returns(Task.FromResult(newUser));
 
         var userController = new UserController(
@@ -273,7 +273,7 @@ public class TestUserController
         var registerUser = UserTestData.GetValidUserForRegistration();
         var newUser = _userMapper.Map<User>(registerUser);
         
-        mockUserService.Setup(service => service.RegisterNewUser(registerUser))
+        mockUserService.Setup(service => service.RegisterUser(registerUser))
             .Returns(Task.FromResult(newUser));
 
         var userController = new UserController(
@@ -304,7 +304,7 @@ public class TestUserController
             .Returns(false);
         
         var mockUserService = new Mock<IUserService>();
-        mockUserService.Setup(service => service.RegisterNewUser(invalidUserData))
+        mockUserService.Setup(service => service.RegisterUser(invalidUserData))
             .Returns(Task.FromResult(new User()));
 
         var userController = new UserController(
