@@ -85,7 +85,7 @@ public static class UserTestData
     {
         return new UpdateUserDto
         {
-            Email = "test",
+            Email = "test", // invalid E-Mail
             Password = "P4ssw0rd",
             FirstName = "Stefan",
             LastName = "Eder"
