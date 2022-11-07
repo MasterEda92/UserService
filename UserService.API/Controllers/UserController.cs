@@ -46,8 +46,8 @@ public class UserController : ControllerBase
         {
             return Ok(_mapper.Map<List<UserDto>>(allUsers));
         }
-        else
-            return NotFound();
+
+        return NotFound();
     }
 
     [HttpGet("{userId:int}")]
@@ -78,25 +78,10 @@ public class UserController : ControllerBase
     {
         if (!_userLoginValidator.ValidateUserData(loginUser))
             return BadRequest();
-        
-        // TODO: Darüber nachdenken, ob das nicht im Validator über Exceptions oder Status-DTO abgebidlet werden soll!
-        if (!string.IsNullOrWhiteSpace(loginUser.UserName))
-        {
-            var user = await _userService.GetUserByUserName(loginUser.UserName);
-            if (user is null)
-                return StatusCode((int)HttpStatusCode.NotFound);
-        }
-        
-        else if (!string.IsNullOrWhiteSpace(loginUser.Email))
-        {
-            var user = await _userService.GetUserByEmail(loginUser.Email);
-            if (user is null)
-                return StatusCode((int)HttpStatusCode.NotFound);
-        }
-        else
-        {
-            // should be caught by Validation
-        }
+
+        var user = await GetUserByUserNameOrEMailElseNull(loginUser);
+        if (user is null)
+            return StatusCode((int)HttpStatusCode.NotFound);
 
         var token = await LoginUserAndGetTokenElseNull(loginUser);
         if (token is null)
@@ -104,7 +89,7 @@ public class UserController : ControllerBase
         
         return Ok(token);
     }
-    
+
     [HttpDelete("{userId:int}")]
     public async Task<ActionResult<UserDto>> DeleteUser(int userId)
     {
@@ -161,6 +146,15 @@ public class UserController : ControllerBase
         {
             return null;
         }
+    }
+    
+    private async Task<User?> GetUserByUserNameOrEMailElseNull(LoginUserDto userData)
+    {
+        if (!string.IsNullOrWhiteSpace(userData.UserName))
+            return await _userService.GetUserByUserName(userData.UserName);
+        if (!string.IsNullOrWhiteSpace(userData.Email))
+            return await _userService.GetUserByEmail(userData.Email);
+        return null;
     }
     
     private async Task<string?> LoginUserAndGetTokenElseNull(LoginUserDto loginUser)
