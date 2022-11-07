@@ -14,13 +14,16 @@ public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
-    private readonly IUserValidator _validator;
+    private readonly IUserRegistrationValidator _registrationValidator;
+    private readonly IUserUpdateValidator _userUpdateValidator;
 
-    public UserController(IUserService userService, IMapper mapper, IUserValidator validator)
+    public UserController(IUserService userService, IMapper mapper, IUserRegistrationValidator registrationValidator,
+        IUserUpdateValidator userUpdateValidator)
     {
         _userService = userService;
         _mapper = mapper;
-        _validator = validator;
+        _registrationValidator = registrationValidator;
+        _userUpdateValidator = userUpdateValidator;
     }
 
     [HttpGet(Name = "GetAllUsers")]
@@ -46,6 +49,60 @@ public class UserController : ControllerBase
         return Ok(_mapper.Map<UserDto>(user));
     }
 
+    [HttpPost("/register")]
+    public async Task<ActionResult<UserDto>> RegisterUser([FromBody]RegisterUserDto registerUser)
+    {
+        if (!_registrationValidator.ValidateUserData(registerUser))
+            throw new UserRegistrationDataInvalidException();
+        
+        var user = await _userService.RegisterNewUser(registerUser);
+        return StatusCode((int)HttpStatusCode.Created, _mapper.Map<UserDto>(user));
+    }
+
+    [HttpDelete("{userId:int}")]
+    public async Task<ActionResult<UserDto>> DeleteUser(int userId)
+    {
+        var userToDelete = await GetUserByIdIfUserExistsElseNull(userId);
+        if (userToDelete is null)
+            return StatusCode((int)HttpStatusCode.NotFound);
+        
+        // ToDo: DeleteUserWithId refactoring: return deleted user and throw exception if deletion fails, then use CheckIfUserExists above
+        var isUserDeleted = await _userService.DeleteUserWithId(userId);
+        if (isUserDeleted)
+            return Ok(_mapper.Map<UserDto>(userToDelete));
+        
+        return StatusCode((int)HttpStatusCode.InternalServerError);
+    }
+
+    [HttpPut("{userId:int}")]
+    public async Task<ActionResult<UserDto>> UpdateUser([FromRoute]int userId, [FromBody]UpdateUserDto updateUser)
+    {
+        if (!await CheckIfUserExists(userId))
+            return StatusCode((int)HttpStatusCode.NotFound);
+
+        if (!_userUpdateValidator.ValidateUserData(updateUser))
+            return BadRequest();
+
+        var user = await UpdateAndGetUserWithIdElseNull(userId, updateUser);
+        if (user is not null)
+            return Ok(_mapper.Map<UserDto>(user));
+
+        return StatusCode((int)HttpStatusCode.InternalServerError);
+    }
+
+    private async Task<User?> UpdateAndGetUserWithIdElseNull(int userId, UpdateUserDto updateUser)
+    {
+        try
+        {
+            return await _userService.UpdateUserWithId(userId, updateUser);
+        }
+        catch (UserUpdateFailedException)
+        {
+            return null;
+        }
+    }
+
+
     private async Task<User?> GetUserByIdIfUserExistsElseNull(int userId)
     {
         try
@@ -58,32 +115,11 @@ public class UserController : ControllerBase
             return null;
         }
     }
-
-    [HttpPost("/register")]
-    public async Task<ActionResult<UserDto>> RegisterUser([FromBody]RegisterUserDto registerUser)
+    
+    private async Task<bool> CheckIfUserExists(int userId)
     {
-        if (!_validator.ValidateUserData(registerUser))
-            throw new UserRegistrationDataInvalidException();
-        
-        var user = await _userService.RegisterNewUser(registerUser);
-        var newUser = _mapper.Map<UserDto>(user);
-        return StatusCode((int)HttpStatusCode.Created, newUser);
-    }
-
-    [HttpDelete("{userId:int}")]
-    public async Task<ActionResult<UserDto>> DeleteUser(int userId)
-    {
-        bool isUserDeleted = await _userService.DeleteUserWithId(userId);
-        if (isUserDeleted)
-            return Ok(new UserDto());
-        else
-            return StatusCode((int)HttpStatusCode.InternalServerError);
-    }
-
-    [HttpPut("{userId:int}")]
-    public async Task<ActionResult<UserDto>> UpdateUser([FromRoute]int userId, [FromBody]UpdateUserDto updateUser)
-    {
-        var user = await _userService.UpdateUserWithId(userId, updateUser);
-        return Ok(_mapper.Map<UserDto>(user));
+        // TODO: Hier ggf. in der Service-Klasse eine eigene Funktion einbauen, die nur prüft ob ein User zur übergebenen Id existiert ohne den ganzen User zu ermitteln.
+        var userToDelete = await GetUserByIdIfUserExistsElseNull(userId);
+        return userToDelete is not null;
     }
 }

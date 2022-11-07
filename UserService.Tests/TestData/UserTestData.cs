@@ -74,6 +74,17 @@ public static class UserTestData
     {
         return new UpdateUserDto
         {
+            Email = "test@test.com",
+            Password = "P4ssw0rd",
+            FirstName = "Stefan",
+            LastName = "Eder"
+        };
+    }
+    
+    public static UpdateUserDto GetInvalidUserForUpdate()
+    {
+        return new UpdateUserDto
+        {
             Email = "test",
             Password = "P4ssw0rd",
             FirstName = "Stefan",
