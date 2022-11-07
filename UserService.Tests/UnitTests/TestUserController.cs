@@ -308,12 +308,12 @@ public class TestUserController
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
-        const int userId = 1;
-        mockUserService.Setup(service => service.DeleteUserWithId(userId))
-            .Returns(Task.FromResult(true));
+        var user = UserTestData.GetTestUser();
+        mockUserService.Setup(service => service.DeleteUserWithId(user.Id))
+            .Returns(Task.FromResult(user));
         
-        mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(Task.FromResult(new User()));
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(user.Id))
+            .Returns(Task.FromResult(true));
 
         var userController = new UserController(
             mockUserService.Object,
@@ -322,7 +322,7 @@ public class TestUserController
             GetValidUserUpdateValidator());
         
         // Act
-        var result = await userController.DeleteUser(userId);
+        var result = await userController.DeleteUser(user.Id);
 
         // Assert
         result.Result.ShouldBeOfType<OkObjectResult>();
@@ -333,12 +333,12 @@ public class TestUserController
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
-        const int userId = 1;
-        mockUserService.Setup(service => service.DeleteUserWithId(userId))
-            .Returns(Task.FromResult(false));
+        var user = UserTestData.GetTestUser();
+        mockUserService.Setup(service => service.DeleteUserWithId(user.Id))
+            .Returns(() => throw new UserDeleteFailedException());
         
-        mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(Task.FromResult(new User()));
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(user.Id))
+            .Returns(Task.FromResult(true));
 
         var userController = new UserController(
             mockUserService.Object,
@@ -347,7 +347,7 @@ public class TestUserController
             GetValidUserUpdateValidator());
         
         // Act
-        var result = await userController.DeleteUser(userId);
+        var result = await userController.DeleteUser(user.Id);
 
         // Assert
         ((StatusCodeResult)result.Result!).StatusCode.ShouldBe(500);
@@ -359,10 +359,10 @@ public class TestUserController
         // Arrange
         var mockUserService = new Mock<IUserService>();
         const int userId = 99;
-        mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(() => throw new UserNotFoundException());
-        mockUserService.Setup(service => service.DeleteUserWithId(userId))
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(userId))
             .Returns(Task.FromResult(false));
+        mockUserService.Setup(service => service.DeleteUserWithId(userId))
+            .Returns(() => throw new UserNotFoundException());
 
         var userController = new UserController(
             mockUserService.Object,
@@ -383,9 +383,9 @@ public class TestUserController
         var mockUserService = new Mock<IUserService>();
         var user = UserTestData.GetTestUser();
         mockUserService.Setup(service => service.DeleteUserWithId(user.Id))
-            .Returns(Task.FromResult(true));
-        mockUserService.Setup(service => service.GetUserById(user.Id))
             .Returns(Task.FromResult(user));
+        mockUserService.Setup(service => service.CheckIfUserWithIdExists(user.Id))
+            .Returns(Task.FromResult(true));
 
         var userController = new UserController(
             mockUserService.Object,

@@ -62,15 +62,13 @@ public class UserController : ControllerBase
     [HttpDelete("{userId:int}")]
     public async Task<ActionResult<UserDto>> DeleteUser(int userId)
     {
-        var userToDelete = await GetUserByIdIfUserExistsElseNull(userId);
-        if (userToDelete is null)
+        if (!await _userService.CheckIfUserWithIdExists(userId))
             return StatusCode((int)HttpStatusCode.NotFound);
-        
-        // ToDo: DeleteUserWithId refactoring: return deleted user and throw exception if deletion fails, then use CheckIfUserExists above
-        var isUserDeleted = await _userService.DeleteUserWithId(userId);
-        if (isUserDeleted)
-            return Ok(_mapper.Map<UserDto>(userToDelete));
-        
+
+        var deletedUser = await DeletedAndGetUserWithIdElseNull(userId);
+        if (deletedUser is not null)
+            return Ok(_mapper.Map<UserDto>(deletedUser));
+
         return StatusCode((int)HttpStatusCode.InternalServerError);
     }
 
@@ -111,6 +109,18 @@ public class UserController : ControllerBase
             return user;
         }
         catch (UserNotFoundException)
+        {
+            return null;
+        }
+    }
+    private async Task<User?> DeletedAndGetUserWithIdElseNull(int userId)
+    {
+        try
+        {
+            var deletedUser = await _userService.DeleteUserWithId(userId);
+            return deletedUser;
+        }
+        catch (UserDeleteFailedException)
         {
             return null;
         }
