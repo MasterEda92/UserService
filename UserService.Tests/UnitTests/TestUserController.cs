@@ -550,4 +550,38 @@ public class TestUserController
     }
     
     #endregion
+
+    #region LoginUserTests
+
+    [Fact]
+    public async Task LoginUserShouldReturn200WhenUserLoginWasSuccessful()
+    {
+        
+    }
+    
+    [Fact]
+    public async Task LoginUserShouldReturnTokenWhenUserLoginWasSuccessful()
+    {
+        
+    }
+    
+    [Fact]
+    public async Task LoginUserShouldReturn404WhenGivenUserCouldNotBeFound()
+    {
+        
+    }
+    
+    [Fact]
+    public async Task LoginUserShouldReturn400WhenGivenUserDataIsInvalid()
+    {
+        
+    }
+    
+    [Fact]
+    public async Task LoginUserShouldReturn403WhenGivenPasswordIsWrong()
+    {
+        
+    }
+
+    #endregion
 }
