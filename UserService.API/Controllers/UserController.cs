@@ -138,5 +138,10 @@ public class UserController : ControllerBase
 
     #endregion
 
-    
+    [HttpPost("/login")]
+    public async Task<ActionResult<string>> LoginUser ([FromBody]LoginUserDto loginUser)
+    {
+        var token = await _userService.LoginUser(loginUser);
+        return Ok(token);
+    }
 }

@@ -556,13 +556,75 @@ public class TestUserController
     [Fact]
     public async Task LoginUserShouldReturn200WhenUserLoginWasSuccessful()
     {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        const int userId = 1;
+        var loginUser = UserTestData.GetValidUserForLogin();
         
+        mockUserService.Setup(service => service.LoginUser(loginUser))
+            .Returns(Task.FromResult("test_token"));
+        
+        var userController = new UserController(
+            mockUserService.Object,
+            _userMapper,
+            GetValidUserRegistrationValidator(),
+            GetValidUserUpdateValidator());
+        
+        // Act
+        var result = await userController.LoginUser(loginUser);
+        
+        // Assert
+        result.Result.ShouldBeOfType<OkObjectResult>();
     }
     
     [Fact]
     public async Task LoginUserShouldReturnTokenWhenUserLoginWasSuccessful()
     {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        const int userId = 1;
+        var loginUser = UserTestData.GetValidUserForLogin();
         
+        mockUserService.Setup(service => service.LoginUser(loginUser))
+            .Returns(Task.FromResult("test_token"));
+        
+        var userController = new UserController(
+            mockUserService.Object,
+            _userMapper,
+            GetValidUserRegistrationValidator(),
+            GetValidUserUpdateValidator());
+        
+        // Act
+        var result = await userController.LoginUser(loginUser);
+        var actual = Utility.GetObjectResultContent(result);
+        
+        // Assert
+        actual.ShouldNotBeEmpty();
+    }
+    
+    [Fact]
+    public async Task LoginUserShouldReturnTheCorrectTokenWhenUserLoginWasSuccessful()
+    {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        const int userId = 1;
+        var loginUser = UserTestData.GetValidUserForLogin();
+        const string token = "test_token";
+        mockUserService.Setup(service => service.LoginUser(loginUser))
+            .Returns(Task.FromResult(token));
+        
+        var userController = new UserController(
+            mockUserService.Object,
+            _userMapper,
+            GetValidUserRegistrationValidator(),
+            GetValidUserUpdateValidator());
+        
+        // Act
+        var result = await userController.LoginUser(loginUser);
+        var actual = Utility.GetObjectResultContent(result);
+        
+        // Assert
+        actual.ShouldBe(token);
     }
     
     [Fact]

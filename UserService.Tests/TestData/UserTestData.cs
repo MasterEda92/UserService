@@ -91,4 +91,15 @@ public static class UserTestData
             LastName = "Eder"
         };
     }
+    
+    public static LoginUserDto GetValidUserForLogin()
+    {
+        return new LoginUserDto
+        {
+            UserName = "test",
+            Email = "test@test.com",
+            Password = "P4ssw0rd",
+        };
+    }
 }
+
