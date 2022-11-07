@@ -12,6 +12,7 @@ using UserService.Tests.Utils;
 
 namespace UserService.Tests.UnitTests;
 
+// TODO: Refactor Tests: Remove duplicate Code in Arrange Sections
 public class TestUserController
 {
     #region CommonTestDataAndFunctions
@@ -40,6 +41,14 @@ public class TestUserController
         return mockUserValidator.Object;
     }
     
+    private static IUserLoginValidator GetValidUserLoginValidator()
+    {
+        var mockUserValidator = new Mock<IUserLoginValidator>();
+        mockUserValidator.Setup(validator => validator.ValidateUserData(It.IsAny<LoginUserDto>()))
+            .Returns(true);
+        return mockUserValidator.Object;
+    }
+    
     #endregion
 
     #region GetAllUsersTests
@@ -57,7 +66,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
 
         // Act
         var result = await userController.GetAllUsers();
@@ -78,7 +88,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper, 
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
 
         // Act
         var result = await userController.GetAllUsers();
@@ -100,7 +111,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
 
         // Act
         var result = await userController.GetAllUsers();
@@ -124,7 +136,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
 
         // Act
         var result = await userController.GetAllUsers();
@@ -159,7 +172,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.GetUserById(userId);
@@ -176,13 +190,14 @@ public class TestUserController
         var mockUserService = new Mock<IUserService>();
         var testUser = UserTestData.GetTestUser();
         mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(Task.FromResult(testUser));
+            .Returns(Task.FromResult(testUser)!);
 
         var userController = new UserController(
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.GetUserById(userId);
@@ -199,13 +214,14 @@ public class TestUserController
         var mockUserService = new Mock<IUserService>();
         var testUser = UserTestData.GetTestUser();
         mockUserService.Setup(service => service.GetUserById(userId))
-            .Returns(Task.FromResult(testUser));
+            .Returns(Task.FromResult(testUser)!);
 
         var userController = new UserController(
             mockUserService.Object,
             _userMapper, 
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.GetUserById(userId);
@@ -238,7 +254,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.RegisterUser(registerUser);
@@ -263,7 +280,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper, 
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.RegisterUser(registerUser);
@@ -293,7 +311,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             mockUserValidator.Object,
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act and Assert
         Should.Throw<UserRegistrationDataInvalidException>(userController.RegisterUser(invalidUserData));
@@ -319,7 +338,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper, 
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.DeleteUser(user.Id);
@@ -344,7 +364,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper, 
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.DeleteUser(user.Id);
@@ -368,7 +389,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper, 
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.DeleteUser(userId);
@@ -391,7 +413,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.DeleteUser(user.Id);
@@ -428,7 +451,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.UpdateUser(userId, updateUser);
@@ -455,7 +479,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.UpdateUser(userId, updateUser);
@@ -484,7 +509,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.UpdateUser(userId, updateUser);
@@ -514,7 +540,8 @@ public class TestUserController
             mockUserService.Object, 
             _userMapper, 
             GetValidUserRegistrationValidator(), 
-            mockUserUpdateValidator.Object);
+            mockUserUpdateValidator.Object,
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.UpdateUser(userId, updateUser);
@@ -540,7 +567,8 @@ public class TestUserController
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
         var result = await userController.UpdateUser(userId, updateUser);
@@ -558,20 +586,25 @@ public class TestUserController
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
-        const int userId = 1;
-        var loginUser = UserTestData.GetValidUserForLogin();
+        var loginUserData = UserTestData.GetValidUserForLogin();
+        var loginUser = _userMapper.Map<User>(loginUserData);
         
-        mockUserService.Setup(service => service.LoginUser(loginUser))
+        mockUserService.Setup(service => service.LoginUser(loginUserData))
             .Returns(Task.FromResult("test_token"));
+        mockUserService.Setup(service => service.GetUserByUserName(loginUserData.UserName))
+            .Returns(Task.FromResult<User?>(loginUser));
+        mockUserService.Setup(service => service.GetUserByEmail(loginUserData.Email))
+            .Returns(Task.FromResult<User?>(loginUser));
         
         var userController = new UserController(
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
-        var result = await userController.LoginUser(loginUser);
+        var result = await userController.LoginUser(loginUserData);
         
         // Assert
         result.Result.ShouldBeOfType<OkObjectResult>();
@@ -582,20 +615,24 @@ public class TestUserController
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
-        const int userId = 1;
-        var loginUser = UserTestData.GetValidUserForLogin();
-        
-        mockUserService.Setup(service => service.LoginUser(loginUser))
+        var loginUserData = UserTestData.GetValidUserForLogin();
+        var loginUser = _userMapper.Map<User>(loginUserData);
+        mockUserService.Setup(service => service.LoginUser(loginUserData))
             .Returns(Task.FromResult("test_token"));
+        mockUserService.Setup(service => service.GetUserByUserName(loginUserData.UserName))
+            .Returns(Task.FromResult<User?>(loginUser));
+        mockUserService.Setup(service => service.GetUserByEmail(loginUserData.Email))
+            .Returns(Task.FromResult<User?>(loginUser));
         
         var userController = new UserController(
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
-        var result = await userController.LoginUser(loginUser);
+        var result = await userController.LoginUser(loginUserData);
         var actual = Utility.GetObjectResultContent(result);
         
         // Assert
@@ -607,20 +644,25 @@ public class TestUserController
     {
         // Arrange
         var mockUserService = new Mock<IUserService>();
-        const int userId = 1;
-        var loginUser = UserTestData.GetValidUserForLogin();
-        const string token = "test_token";
-        mockUserService.Setup(service => service.LoginUser(loginUser))
+        var loginUserData= UserTestData.GetNotExistingUserForLogin();
+        var loginUser = _userMapper.Map<User>(loginUserData);
+        const string token = "";
+        mockUserService.Setup(service => service.LoginUser(loginUserData))
             .Returns(Task.FromResult(token));
+        mockUserService.Setup(service => service.GetUserByUserName(loginUserData.UserName))
+            .Returns(Task.FromResult<User?>(loginUser));
+        mockUserService.Setup(service => service.GetUserByEmail(loginUserData.Email))
+            .Returns(Task.FromResult<User?>(loginUser));
         
         var userController = new UserController(
             mockUserService.Object,
             _userMapper,
             GetValidUserRegistrationValidator(),
-            GetValidUserUpdateValidator());
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
         
         // Act
-        var result = await userController.LoginUser(loginUser);
+        var result = await userController.LoginUser(loginUserData);
         var actual = Utility.GetObjectResultContent(result);
         
         // Assert
@@ -630,19 +672,89 @@ public class TestUserController
     [Fact]
     public async Task LoginUserShouldReturn404WhenGivenUserCouldNotBeFound()
     {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        var loginUserData = UserTestData.GetValidUserForLogin();
+        const string token = "test_token";
+        mockUserService.Setup(service => service.LoginUser(loginUserData))
+            .Returns(Task.FromResult(token));
+        mockUserService.Setup(service => service.GetUserByUserName(loginUserData.UserName))
+            .Returns(Task.FromResult<User?>(null));
+        mockUserService.Setup(service => service.GetUserByEmail(loginUserData.Email))
+            .Returns(Task.FromResult<User?>(null));
         
+        var userController = new UserController(
+            mockUserService.Object,
+            _userMapper,
+            GetValidUserRegistrationValidator(),
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
+        
+        // Act
+        var result = await userController.LoginUser(loginUserData);
+        
+        // Assert
+        ((StatusCodeResult)result.Result!).StatusCode.ShouldBe(404);
     }
     
     [Fact]
     public async Task LoginUserShouldReturn400WhenGivenUserDataIsInvalid()
     {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        var loginUserData = UserTestData.GetInvalidUserForLogin();
+        const string token = "test_token";
+        mockUserService.Setup(service => service.LoginUser(loginUserData))
+            .Returns(Task.FromResult(token));
+        mockUserService.Setup(service => service.GetUserByUserName(loginUserData.UserName))
+            .Returns(Task.FromResult<User?>(null));
+        mockUserService.Setup(service => service.GetUserByEmail(loginUserData.Email))
+            .Returns(Task.FromResult<User?>(null));
+
+        var mockUserLoginValidator = new Mock<IUserLoginValidator>();
+        mockUserLoginValidator.Setup(validator => validator.ValidateUserData(loginUserData))
+            .Returns(false);
         
+        var userController = new UserController(
+            mockUserService.Object,
+            _userMapper,
+            GetValidUserRegistrationValidator(),
+            GetValidUserUpdateValidator(),
+            mockUserLoginValidator.Object);
+        
+        // Act
+        var result = await userController.LoginUser(loginUserData);
+        
+        // Assert
+        ((StatusCodeResult)result.Result!).StatusCode.ShouldBe(400);
     }
     
     [Fact]
     public async Task LoginUserShouldReturn403WhenGivenPasswordIsWrong()
     {
+        // Arrange
+        var mockUserService = new Mock<IUserService>();
+        var loginUserData = UserTestData.GetValidUserForLoginWithWrongPassword();
+        var loginUser = _userMapper.Map<User>(loginUserData);
+        mockUserService.Setup(service => service.LoginUser(loginUserData))
+            .Returns(() => throw new UserLoginFailedException());
+        mockUserService.Setup(service => service.GetUserByUserName(loginUserData.UserName))
+            .Returns(Task.FromResult<User?>(loginUser));
+        mockUserService.Setup(service => service.GetUserByEmail(loginUserData.Email))
+            .Returns(Task.FromResult<User?>(loginUser));
         
+        var userController = new UserController(
+            mockUserService.Object,
+            _userMapper,
+            GetValidUserRegistrationValidator(),
+            GetValidUserUpdateValidator(),
+            GetValidUserLoginValidator());
+        
+        // Act
+        var result = await userController.LoginUser(loginUserData);
+        
+        // Assert
+        ((StatusCodeResult)result.Result!).StatusCode.ShouldBe(403);
     }
 
     #endregion

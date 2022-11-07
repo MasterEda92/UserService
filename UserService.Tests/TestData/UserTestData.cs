@@ -101,5 +101,35 @@ public static class UserTestData
             Password = "P4ssw0rd",
         };
     }
+    
+    public static LoginUserDto GetValidUserForLoginWithWrongPassword()
+    {
+        return new LoginUserDto
+        {
+            UserName = "test",
+            Email = "test@test.com",
+            Password = "abc",
+        };
+    }
+    
+    public static LoginUserDto GetInvalidUserForLogin()
+    {
+        return new LoginUserDto
+        {
+            UserName = "",
+            Email = "",
+            Password = "",
+        };
+    }
+
+    public static LoginUserDto GetNotExistingUserForLogin()
+    {
+        return new LoginUserDto
+        {
+            UserName = "Foo",
+            Email = "foo@test.com",
+            Password = "P4ssw0rd",
+        };
+    }
 }
 
