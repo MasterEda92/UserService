@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using UserService.DbAccess.Models;
 
-namespace UserService.DbAccess;
+namespace UserService.DbAccess.DbContext;
 
-public class UserServiceDbContext : DbContext
+public class UserServiceDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public DbSet<UserModel> Users { get; set; } = null!;
 

@@ -10,4 +10,8 @@
     <ProjectReference Include="..\UserService.Core\UserService.Core.csproj" />
     <ProjectReference Include="..\UserService.DbAccess\UserService.DbAccess.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Interfaces" />
+  </ItemGroup>
 </Project>
