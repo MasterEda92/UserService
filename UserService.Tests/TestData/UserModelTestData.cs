@@ -1,3 +1,4 @@
+using UserService.Core.Entities;
 using UserService.DbAccess.Models;
 
 namespace UserService.Tests.TestData;
@@ -37,4 +38,42 @@ public static class UserModelTestData
 
     public static string GetNotExistingUserEmail() => "blabla@bla.com";
 
+    public static User GetValidUserForAdd()
+    {
+        return new User
+        {
+            Id = 0,
+            UserName = "Test3",
+            Email = "test3@test.com",
+            Password = "aldskfwe900900asdgfase82",
+            FirstName = "Jon",
+            LastName = "Doe"
+        };
+    }
+
+    public static User GetNotExistingUserForUpdate()
+    {
+        return new User
+        {
+            Id = 10,
+            UserName = "BlaBla",
+            Email = "bla123@bla.com",
+            Password = "asdf123gasd9a0lkfdga",
+            FirstName = "Test",
+            LastName = "Test"
+        };
+    }
+    
+    public static User GetValidUserForUpdate()
+    {
+        return new User
+        {
+            Id = 1,
+            UserName = "TestUser5",
+            Email = "test@test.com",
+            FirstName = "Maximilian",
+            LastName = "Mustermann",
+            Password = "sfaoe30409fgjae024123"
+        };
+    }
 }

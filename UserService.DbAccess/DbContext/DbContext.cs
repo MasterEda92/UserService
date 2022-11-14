@@ -13,7 +13,7 @@ public class UserDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
-        _dbPath = System.IO.Path.Join(path, "blogging.db");
+        _dbPath = System.IO.Path.Join(path, "users.db");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

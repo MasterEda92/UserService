@@ -40,7 +40,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     {
         // Arrange
         await using var context = _fixture.CreateContext();
-        IUserStore store = new UserStoreDb(context, _userMapper);
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
         
         // Act
         var users = await store.GetAllUsers();
@@ -54,7 +54,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     {
         // Arrange
         await using var context = _fixture.CreateContext();
-        IUserStore store = new UserStoreDb(context, _userMapper);
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
         var allUsers = UserModelTestData.GetUserModelsTestData().ToList();
         
         // Act
@@ -82,7 +82,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     {
         // Arrange
         await using var context = _fixture.CreateContext();
-        IUserStore store = new UserStoreDb(context, _userMapper);
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
         
         // Act
         var user = await store.GetUserWithId(UserModelTestData.GetExistingUserId());
@@ -96,7 +96,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     {
         // Arrange
         await using var context = _fixture.CreateContext();
-        IUserStore store = new UserStoreDb(context, _userMapper);
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetExistingUserModel();
         
         // Act
@@ -116,7 +116,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     {
         // Arrange
         await using var context = _fixture.CreateContext();
-        IUserStore store = new UserStoreDb(context, _userMapper);
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
         
         // Act and Assert
         await Should.ThrowAsync<UserNotFoundException>(store.GetUserWithId(UserModelTestData.GetNotExistingUserId()));
@@ -131,7 +131,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     {
         // Arrange
         await using var context = _fixture.CreateContext();
-        IUserStore store = new UserStoreDb(context, _userMapper);
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetExistingUserModel();
         
         // Act
@@ -146,7 +146,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     {
         // Arrange
         await using var context = _fixture.CreateContext();
-        IUserStore store = new UserStoreDb(context, _userMapper);
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
         
         // Act
         var users = await store.GetUsers(user => user.Email == UserModelTestData.GetNotExistingUserEmail());
@@ -160,7 +160,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     {
         // Arrange
         await using var context = _fixture.CreateContext();
-        IUserStore store = new UserStoreDb(context, _userMapper);
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetExistingUserModel();
         
         // Act
@@ -197,7 +197,11 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
     {
         _fixture = fixture;
         
-        var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new UserModelProfile()); });
+        var mapperConfig = new MapperConfiguration(mc =>
+        {
+            mc.AddExpressionMapping();
+            mc.AddProfile(new UserModelProfile());
+        });
         _userMapper = mapperConfig.CreateMapper();
     }
 
@@ -205,7 +209,72 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
 
     #region tests
 
-    
+    #region AddUserTests
+
+    [Fact]
+    public async Task AddUserShouldReturnTheAddedUserWhenSuccessful()
+    {
+        // Arrange
+        await using var context = _fixture.CreateContext();
+        await context.Database.BeginTransactionAsync();
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
+        var testUser = UserModelTestData.GetValidUserForAdd();
+        
+        // Act
+        var user = await store.AddUser(testUser);
+       
+        context.ChangeTracker.Clear();
+
+        // Assert
+        user.ShouldNotBeNull();
+        user.UserName.ShouldBe(testUser.UserName);
+        user.Email.ShouldBe(testUser.Email);
+        user.Password.ShouldBe(testUser.Password);
+        user.FirstName.ShouldBe(testUser.FirstName);
+        user.LastName.ShouldBe(testUser.LastName);
+    }
+
+    #endregion
+
+    #region UpdateUserTests
+
+    [Fact]
+    public async Task UpdateUserShouldThrowUserNotFoundExceptionWhenGivenUserDoesNotExist()
+    {
+        // Arrange
+        await using var context = _fixture.CreateContext();
+        await context.Database.BeginTransactionAsync();
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
+        var testUser = UserModelTestData.GetNotExistingUserForUpdate();
+        
+        // Act and Assert
+        await Should.ThrowAsync<UserNotFoundException>(store.UpdateUser(testUser));
+    }
+
+    [Fact]
+    public async Task UpdateUserShouldReturnTheUpdatedUserWhenSuccessful()
+    {
+        // Arrange
+        await using var context = _fixture.CreateContext();
+        await context.Database.BeginTransactionAsync();
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
+        var testUser = UserModelTestData.GetValidUserForUpdate();
+
+        // Act
+        var user = await store.UpdateUser(testUser);
+
+        context.ChangeTracker.Clear();
+
+        // Assert
+        user.Id.ShouldBe(testUser.Id);
+        user.UserName.ShouldBe(testUser.UserName);
+        user.Email.ShouldBe(testUser.Email);
+        user.Password.ShouldBe(testUser.Password);
+        user.FirstName.ShouldBe(testUser.FirstName);
+        user.LastName.ShouldBe(testUser.LastName);
+    }
+
+    #endregion
     
     #endregion
 

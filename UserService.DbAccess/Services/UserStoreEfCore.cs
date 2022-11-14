@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using AutoMapper;
+using AutoMapper.Extensions.ExpressionMapping;
 using Microsoft.EntityFrameworkCore;
 using UserService.Core.Entities;
 using UserService.Core.Exceptions;
@@ -9,12 +10,12 @@ using UserService.DbAccess.Models;
 
 namespace UserService.DbAccess.Services;
 
-public class UserStoreDb : IUserStore
+public class UserStoreEfCore : IUserStore
 {
     private readonly UserDbContext _context;
     private readonly IMapper _mapper;
 
-    public UserStoreDb(UserDbContext context, IMapper mapper)
+    public UserStoreEfCore(UserDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
@@ -47,16 +48,17 @@ public class UserStoreDb : IUserStore
     {
         var entry = await _context.AddAsync(_mapper.Map<UserModel>(newUser));
         return _mapper.Map<User>(entry.Entity);
-
     }
 
-    public Task<User> UpdateUser(User user)
+    public async Task<User> UpdateUser(User user)
     {
-        var updatedUser = _context.Users.Update(_mapper.Map<UserModel>(user)).Entity;
-        if (updatedUser is null)
-            throw new UserNotFoundException(); // TODO: Prüfen ob hier noch andere Fälle auftreten können
+        var userForUpdate = await _context.Users.FindAsync(user.Id);
+        if (userForUpdate is null)
+            throw new UserNotFoundException(); 
         
-        return Task.FromResult(_mapper.Map<User>(updatedUser));
+        _mapper.Map(user, userForUpdate);
+        var updatedUser = _context.Users.Update(userForUpdate).Entity;
+        return _mapper.Map<User>(updatedUser);
     }
 
     public async Task<User> DeleteUserWithId(int id)
