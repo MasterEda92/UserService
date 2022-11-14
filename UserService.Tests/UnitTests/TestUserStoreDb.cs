@@ -275,6 +275,69 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
     }
 
     #endregion
+
+    #region DeleteUserTests
+
+    [Fact]
+    public async Task DeleteUserShouldThrowUserNotFoundExceptionWhenGivenUserDoesNotExist()
+    {
+        // Arrange
+        await using var context = _fixture.CreateContext();
+        await context.Database.BeginTransactionAsync();
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
+        var testUser = UserModelTestData.GetNotExistingUserForDelete();
+        
+        // Act and Assert
+        await Should.ThrowAsync<UserNotFoundException>(store.DeleteUserWithId(testUser.Id));
+    }
+    
+    [Fact]
+    public async Task DeleteUserShouldReturnTheDeletedUserWhenSuccessful()
+    {
+        // Arrange
+        await using var context = _fixture.CreateContext();
+        await context.Database.BeginTransactionAsync();
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
+        var testUser = UserModelTestData.GetValidUserForDelete();
+
+        // Act
+        var user = await store.DeleteUserWithId(testUser.Id);
+
+        context.ChangeTracker.Clear();
+
+        // Assert
+        user.Id.ShouldBe(testUser.Id);
+        user.UserName.ShouldBe(testUser.UserName);
+        user.Email.ShouldBe(testUser.Email);
+        user.Password.ShouldBe(testUser.Password);
+        user.FirstName.ShouldBe(testUser.FirstName);
+        user.LastName.ShouldBe(testUser.LastName);
+    }
+
+    #endregion
+
+    #region SaveTests
+
+    [Fact]
+    public async Task SaveShouldReturnTheCorrectAmountOfChangedObjectsWhenSuccessful()
+    {
+        // Arrange
+        await using var context = _fixture.CreateContext();
+        await context.Database.BeginTransactionAsync();
+        IUserStore store = new UserStoreEfCore(context, _userMapper);
+        var testUser = UserModelTestData.GetValidUserForAdd();
+        
+        // Act
+        var user = await store.AddUser(testUser);
+        int amount = await store.Save();
+       
+        context.ChangeTracker.Clear();
+
+        // Assert
+        amount.ShouldBe(1);
+    }
+
+    #endregion
     
     #endregion
 

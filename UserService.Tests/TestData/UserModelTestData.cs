@@ -63,6 +63,8 @@ public static class UserModelTestData
             LastName = "Test"
         };
     }
+
+    public static User GetNotExistingUserForDelete() => GetNotExistingUserForUpdate();
     
     public static User GetValidUserForUpdate()
     {
@@ -72,6 +74,19 @@ public static class UserModelTestData
             UserName = "TestUser5",
             Email = "test@test.com",
             FirstName = "Maximilian",
+            LastName = "Mustermann",
+            Password = "sfaoe30409fgjae024123"
+        };
+    }
+
+    public static User GetValidUserForDelete()
+    {
+        return new User
+        {
+            Id = 1,
+            UserName = "TestUser1",
+            Email = "test@test.com",
+            FirstName = "Max",
             LastName = "Mustermann",
             Password = "sfaoe30409fgjae024123"
         };

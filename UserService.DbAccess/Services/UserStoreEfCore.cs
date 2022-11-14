@@ -67,7 +67,7 @@ public class UserStoreEfCore : IUserStore
         if (user is null)
             throw new UserNotFoundException();
         
-        var delUser = _context.Users.Remove(_mapper.Map<UserModel>(user)).Entity;
+        var delUser = _context.Users.Remove(user).Entity;
         return _mapper.Map<User>(delUser);
     }
 
