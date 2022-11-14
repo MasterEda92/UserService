@@ -38,9 +38,7 @@ public class UserStoreEfCore : IUserStore
 
     public Task<IQueryable<User>> GetUsers(Expression<Func<User, bool>> predicate)
     {
-        var filterDb = _mapper.Map<Expression<Func<UserModel, bool>>>(predicate);
-        var query = _context.Users.Where(filterDb).UseAsDataSource(_mapper).For<User>();
-        
+        var query = _context.Users.UseAsDataSource(_mapper).For<User>().Where(predicate);
         return Task.FromResult(query.AsQueryable());
     }
 
