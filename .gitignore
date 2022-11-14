@@ -50,6 +50,9 @@ Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db
 
+# database files
+*.db
+
 # Dump file
 *.stackdump
 
