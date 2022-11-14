@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using UserService.DbAccess.DbContext;
 using UserService.Tests.TestData;
 
@@ -28,6 +29,16 @@ public class TestUserDbFixture
         }
     }
 
-    public UserDbContext CreateContext()
-        => new UserDbContext();
+    public static UserDbContext CreateContext()
+    {
+         var path = Path.GetDirectoryName(Path.GetDirectoryName(
+             System.IO.Path.GetDirectoryName( 
+                 System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase )));
+        var dbPath = System.IO.Path.Join(path, "..", "users.db");
+        var context = new UserDbContext(new DbContextOptionsBuilder<UserDbContext>()
+            .UseSqlite($"Data Source={dbPath}")
+            .Options);
+        
+        return context;
+    }
 }

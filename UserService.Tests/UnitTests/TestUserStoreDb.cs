@@ -39,7 +39,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     public async Task GetAllUsersShouldReturnAllUsersWhenThereAreUsersInTheDb()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         
         // Act
@@ -53,7 +53,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     public async Task GetAllUsersShouldReturnTheCorrectUsersWhenThereAreUsersInTheDb()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var allUsers = UserModelTestData.GetUserModelsTestData().ToList();
         
@@ -81,7 +81,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     public async Task GetUserWithIdShouldReturnAUserWhenUserWithGivenIdExists()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         
         // Act
@@ -95,7 +95,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     public async Task GetUserWithIdShouldReturnTheCorrectUserWhenUserWithGivenIdExists()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetExistingUserModel();
         
@@ -115,7 +115,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     public async Task GetUserWithIdShouldThrowUserNotFoundExceptionWhenUserWithGivenIdDoesNotExist()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         
         // Act and Assert
@@ -130,7 +130,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     public async Task GetUsersShouldReturnTheCorrectAmountOfUsersWhenUsersWithGivenPredicateExist()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetExistingUserModel();
         
@@ -145,7 +145,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     public async Task GetUsersShouldReturnZeroUsersWhenUsersWithGivenPredicateDoNotExist()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         
         // Act
@@ -159,7 +159,7 @@ public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
     public async Task GetUsersShouldReturnTheCorrectUsersWhenUsersWithGivenPredicateExist()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetExistingUserModel();
         
@@ -215,7 +215,7 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
     public async Task AddUserShouldReturnTheAddedUserWhenSuccessful()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         await context.Database.BeginTransactionAsync();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetValidUserForAdd();
@@ -242,7 +242,7 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
     public async Task UpdateUserShouldThrowUserNotFoundExceptionWhenGivenUserDoesNotExist()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         await context.Database.BeginTransactionAsync();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetNotExistingUserForUpdate();
@@ -255,7 +255,7 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
     public async Task UpdateUserShouldReturnTheUpdatedUserWhenSuccessful()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         await context.Database.BeginTransactionAsync();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetValidUserForUpdate();
@@ -282,7 +282,7 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
     public async Task DeleteUserShouldThrowUserNotFoundExceptionWhenGivenUserDoesNotExist()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         await context.Database.BeginTransactionAsync();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetNotExistingUserForDelete();
@@ -295,7 +295,7 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
     public async Task DeleteUserShouldReturnTheDeletedUserWhenSuccessful()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         await context.Database.BeginTransactionAsync();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetValidUserForDelete();
@@ -322,7 +322,7 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
     public async Task SaveShouldReturnTheCorrectAmountOfChangedObjectsWhenSuccessful()
     {
         // Arrange
-        await using var context = _fixture.CreateContext();
+        await using var context = TestUserDbFixture.CreateContext();
         await context.Database.BeginTransactionAsync();
         IUserStore store = new UserStoreEfCore(context, _userMapper);
         var testUser = UserModelTestData.GetValidUserForAdd();
