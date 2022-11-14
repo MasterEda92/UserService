@@ -4,9 +4,9 @@ using AutoMapper.Extensions.ExpressionMapping;
 using Microsoft.EntityFrameworkCore;
 using UserService.Core.Entities;
 using UserService.Core.Exceptions;
-using UserService.Core.Interfaces;
 using UserService.DbAccess.DbContext;
 using UserService.DbAccess.Models;
+using UserService.Infrastructure.Interfaces;
 
 namespace UserService.DbAccess.Services;
 
