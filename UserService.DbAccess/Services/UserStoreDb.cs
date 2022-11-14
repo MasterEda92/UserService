@@ -10,7 +10,17 @@ public class UserStoreDb : IUserStore
         throw new NotImplementedException();
     }
 
+    public Task<User> UpdateUser(User user)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<User> DeleteUserWithId(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Save()
     {
         throw new NotImplementedException();
     }
