@@ -36,12 +36,12 @@ public class UserStoreEfCore : IUserStore
         return _mapper.Map<User>(user);
     }
 
-    public async Task<IEnumerable<User>> GetUsers(Expression<Func<User, bool>> predicate)
+    public Task<IQueryable<User>> GetUsers(Expression<Func<User, bool>> predicate)
     {
         var filterDb = _mapper.Map<Expression<Func<UserModel, bool>>>(predicate);
-        IEnumerable<UserModel> users = _context.Users.Where(filterDb).ToList();
-
-        return await Task.FromResult(_mapper.Map<IEnumerable<User>>(users));
+        var query = _context.Users.Where(filterDb).UseAsDataSource(_mapper).For<User>();
+        
+        return Task.FromResult(query.AsQueryable());
     }
 
     public async Task<User> AddUser(User newUser)
