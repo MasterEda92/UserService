@@ -3,13 +3,13 @@ using UserService.DbAccess.Models;
 
 namespace UserService.DbAccess.DbContext;
 
-public class UserServiceDbContext : Microsoft.EntityFrameworkCore.DbContext
+public class UserDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public DbSet<UserModel> Users { get; set; } = null!;
 
     private readonly string _dbPath;
     
-    public UserServiceDbContext()
+    public UserDbContext()
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);

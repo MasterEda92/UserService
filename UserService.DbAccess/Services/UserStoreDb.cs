@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using UserService.Core.Entities;
@@ -10,15 +11,38 @@ namespace UserService.DbAccess.Services;
 
 public class UserStoreDb : IUserStore
 {
-    private readonly UserServiceDbContext _context;
+    private readonly UserDbContext _context;
     private readonly IMapper _mapper;
 
-    public UserStoreDb(UserServiceDbContext context, IMapper mapper)
+    public UserStoreDb(UserDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
     }
     
+    public async Task<IEnumerable<User>> GetAllUsers()
+    {
+        IEnumerable<UserModel> users = await _context.Users.ToListAsync();
+        return _mapper.Map<IEnumerable<User>>(users);
+    }
+    
+    public async Task<User> GetUserWithId(int id)
+    {
+        var user = await _context.Users.SingleOrDefaultAsync(user => user.Id == id);
+        if (user is null)
+            throw new UserNotFoundException();
+        
+        return _mapper.Map<User>(user);
+    }
+
+    public async Task<IEnumerable<User>> GetUsers(Expression<Func<User, bool>> predicate)
+    {
+        var filterDb = _mapper.Map<Expression<Func<UserModel, bool>>>(predicate);
+        IEnumerable<UserModel> users = _context.Users.Where(filterDb).ToList();
+
+        return await Task.FromResult(_mapper.Map<IEnumerable<User>>(users));
+    }
+
     public async Task<User> AddUser(User newUser)
     {
         var entry = await _context.AddAsync(_mapper.Map<UserModel>(newUser));
@@ -48,27 +72,5 @@ public class UserStoreDb : IUserStore
     public async Task<int> Save()
     {
         return await _context.SaveChangesAsync();
-    }
-
-    public async Task<User> GetUserWithId(int id)
-    {
-        var user = await _context.Users.SingleOrDefaultAsync(user => user.Id == id);
-        if (user is null)
-            throw new UserNotFoundException();
-        
-        return _mapper.Map<User>(user);
-    }
-
-    public async Task<IEnumerable<User>> GetAllUsers()
-    {
-        IEnumerable<UserModel> users = await _context.Users.ToListAsync();
-        return _mapper.Map<IEnumerable<User>>(users);
-    }
-
-    public async Task<IEnumerable<User>> GetUsers(Func<User, bool> predicate)
-    {
-        var pred = _mapper.Map<Func<UserModel, bool>>(predicate);
-        IEnumerable<UserModel> users = _context.Users.Where(pred).ToList();
-        return await Task.FromResult(_mapper.Map<IEnumerable<User>>(users));
     }
 }
