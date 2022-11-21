@@ -328,8 +328,8 @@ public class TestUserStoreDbWrite : IClassFixture<TestUserDbFixture>
         var testUser = UserModelTestData.GetValidUserForAdd();
         
         // Act
-        var user = await store.AddUser(testUser);
-        int amount = await store.Save();
+        await store.AddUser(testUser);
+        var amount = await store.Save();
        
         context.ChangeTracker.Clear();
 
