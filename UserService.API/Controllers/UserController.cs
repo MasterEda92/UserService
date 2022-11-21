@@ -1,7 +1,7 @@
 using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Core.DTOs;
+using UserService.Contracts.DTOs;
 using UserService.Core.Entities;
 using UserService.Core.Exceptions;
 using UserService.Core.Interfaces;

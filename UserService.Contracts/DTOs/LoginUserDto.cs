@@ -1,4 +1,4 @@
-namespace UserService.Core.DTOs;
+namespace UserService.Contracts.DTOs;
 
 public class LoginUserDto
 {

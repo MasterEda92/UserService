@@ -1,4 +1,4 @@
-using UserService.Core.DTOs;
+using UserService.Contracts.DTOs;
 
 namespace UserService.Core.Interfaces;
 

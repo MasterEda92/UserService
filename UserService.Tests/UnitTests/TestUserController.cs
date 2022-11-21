@@ -2,7 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using UserService.API.Controllers;
-using UserService.Core.DTOs;
+using UserService.Contracts.DTOs;
 using UserService.Core.Entities;
 using UserService.Core.Exceptions;
 using UserService.Core.Interfaces;

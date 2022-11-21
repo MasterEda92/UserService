@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using UserService.Core.DTOs;
+using UserService.Contracts.DTOs;
 using UserService.Core.Entities;
 
 namespace UserService.Tests.TestData;
