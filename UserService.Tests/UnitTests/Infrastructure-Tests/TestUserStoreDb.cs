@@ -8,7 +8,7 @@ using UserService.Tests.Fixtures;
 using UserService.Tests.TestData;
 using UserService.Tests.Utils;
 
-namespace UserService.Tests.UnitTests;
+namespace UserService.Tests.UnitTests.Infrastructure_Tests;
 
 public class TestUserStoreDbRead : IClassFixture<TestUserDbFixture>
 {

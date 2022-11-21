@@ -10,7 +10,7 @@ using UserService.Core.Mappings;
 using UserService.Tests.TestData;
 using UserService.Tests.Utils;
 
-namespace UserService.Tests.UnitTests;
+namespace UserService.Tests.UnitTests.API_Tests;
 
 // TODO: Refactor Tests: Remove duplicate Code in Arrange Sections
 public class TestUserController
