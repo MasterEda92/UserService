@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using UserService.Core.Entities;
 
-namespace UserService.Infrastructure.Interfaces;
+namespace UserService.Core.Interfaces;
 
 public interface IUserStore
 {

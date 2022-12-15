@@ -6,7 +6,7 @@ using UserService.Core.Entities;
 using UserService.Core.Exceptions;
 using UserService.DbAccess.DbContext;
 using UserService.DbAccess.Models;
-using UserService.Infrastructure.Interfaces;
+using UserService.Core.Interfaces;
 
 namespace UserService.DbAccess.Services;
 

@@ -3,7 +3,7 @@ using AutoMapper.Extensions.ExpressionMapping;
 using UserService.Core.Exceptions;
 using UserService.DbAccess.Mappings;
 using UserService.DbAccess.Services;
-using UserService.Infrastructure.Interfaces;
+using UserService.Core.Interfaces;
 using UserService.Tests.Fixtures;
 using UserService.Tests.TestData;
 using UserService.Tests.Utils;

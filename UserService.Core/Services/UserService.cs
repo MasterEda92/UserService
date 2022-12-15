@@ -8,11 +8,18 @@ using UserService.Contracts.DTOs;
 
 namespace UserService.Core.Services;
 
-public class UserService : IUserService
+public class UserService_ : IUserService
 {
-    public Task<IEnumerable<User>> GetAllUsers()
+    private readonly IUserStore _userStore;
+
+    public UserService_(IUserStore userStore)
     {
-        throw new NotImplementedException ();
+        _userStore = userStore;    
+    }
+
+    public async Task<IEnumerable<User>> GetAllUsers()
+    {
+        return await _userStore.GetAllUsers();
     }
 
     public Task<User?> GetUserById(int id)
