@@ -11,6 +11,10 @@ autom4te.cache/
 tarballs/
 test-results/
 
+# VS Code stuff
+launch.json
+tasks.json
+
 # Mac bundle stuff
 *.dmg
 *.app
